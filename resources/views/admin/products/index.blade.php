@@ -8,7 +8,7 @@
     <div class="admin-products-list">
         <div class="admin-product-item">
             <div class="product-image">
-                <img src="/images/products/product1.jpg" alt="商品画像1">
+                <img src="{{ asset('images/products/product1.jpg') }}" alt="商品画像1">
             </div>
             <div class="product-details">
                 <p><strong>商品名:</strong> 商品名1</p>
@@ -23,7 +23,7 @@
         </div>
         <div class="admin-product-item">
             <div class="product-image">
-                <img src="/images/products/product2.jpg" alt="商品画像2">
+                <img src="{{ asset('images/products/product2.jpg') }}" alt="商品画像2">
             </div>
             <div class="product-details">
                 <p><strong>商品名:</strong> 商品名2</p>
@@ -38,7 +38,7 @@
         </div>
         <div class="admin-product-item">
             <div class="product-image">
-                <img src="/images/products/product3.jpg" alt="商品画像3">
+                <img src="{{ asset('images/products/product3.jpg') }}" alt="商品画像3">
             </div>
             <div class="product-details">
                 <p><strong>商品名:</strong> 商品名3</p>

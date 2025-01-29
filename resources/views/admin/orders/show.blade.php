@@ -72,7 +72,7 @@
     <h3 class="section-title">注文情報</h3>
     <div class="order-item">
         <div class="item-image">
-            <img src="/images/products/product1.jpg" alt="商品画像1">
+            <img src="{{ asset('images/products/product1.jpg') }}" alt="商品画像1">
         </div>
         <div class="item-info">
             <div class="info-row">
@@ -89,7 +89,7 @@
     </div>
     <div class="order-item">
         <div class="item-image">
-            <img src="/images/products/product2.jpg" alt="商品画像2">
+            <img src="{{ asset('images/products/product2.jpg') }}" alt="商品画像2">
         </div>
         <div class="item-info">
             <div class="info-row">

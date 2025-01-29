@@ -31,19 +31,19 @@
             </div>
             <div class="admin-products-add-image-container">
                 <div class="admin-products-add-image-box" data-id="1">
-                    <img src="/images/products/product1.jpg" alt="商品画像1" class="admin-products-add-image">
+                    <img src="{{ asset('images/products/product1.jpg') }}" alt="商品画像1" class="admin-products-add-image">
                     <button class="admin-products-add-delete-image-button">削除</button>
                 </div>
                 <div class="admin-products-add-image-box" data-id="2">
-                    <img src="/images/products/product2.jpg" alt="商品画像2" class="admin-products-add-image">
+                    <img src="{{ asset('images/products/product2.jpg') }}" alt="商品画像2" class="admin-products-add-image">
                     <button class="admin-products-add-delete-image-button">削除</button>
                 </div>
                 <div class="admin-products-add-image-box" data-id="3">
-                    <img src="/images/products/product3.jpg" alt="商品画像3" class="admin-products-add-image">
+                    <img src="{{ asset('images/products/product3.jpg') }}" alt="商品画像3" class="admin-products-add-image">
                     <button class="admin-products-add-delete-image-button">削除</button>
                 </div>
                 <div class="admin-products-add-image-box" data-id="4">
-                    <img src="/images/products/product4.jpg" alt="商品画像4" class="admin-products-add-image">
+                    <img src="{{ asset('images/products/product4.jpg') }}" alt="商品画像4" class="admin-products-add-image">
                     <button class="admin-products-add-delete-image-button">削除</button>
                 </div>
             </div>

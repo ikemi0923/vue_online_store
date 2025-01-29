@@ -9,7 +9,7 @@
     <section class="cart-items">
         <div class="cart-item">
             <div class="cart-item-image-container">
-                <img src="/images/products/product1.jpg" alt="商品画像" class="cart-item-image">
+                <img src="{{ asset('images/products/product1.jpg') }}" alt="商品画像" class="cart-item-image">
             </div>
             <p class="cart-item-name">商品A</p>
             <div class="cart-item-quantity">
@@ -22,7 +22,7 @@
         </div>
         <div class="cart-item">
             <div class="cart-item-image-container">
-                <img src="/images/products/product1.jpg" alt="商品画像" class="cart-item-image">
+                <img src="{{ asset('images/products/product1.jpg') }}" alt="商品画像" class="cart-item-image">
             </div>
             <p class="cart-item-name">商品B</p>
             <div class="cart-item-quantity">
@@ -35,7 +35,7 @@
         </div>
         <div class="cart-item">
             <div class="cart-item-image-container">
-                <img src="/images/products/product1.jpg" alt="商品画像" class="cart-item-image">
+                <img src="{{ asset('images/products/product1.jpg') }}" alt="商品画像" class="cart-item-image">
             </div>
             <p class="cart-item-name">商品C</p>
             <div class="cart-item-quantity">
