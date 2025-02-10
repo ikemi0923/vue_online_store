@@ -12,22 +12,19 @@ return new class extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id(); // 主キー
-            $table->string('customer_name'); // 注文者名
-            $table->string('customer_phone'); // 電話番号
-            $table->string('customer_email'); // メールアドレス
-            $table->string('address'); // 住所
-            $table->enum('status', ['未発送', '発送準備中', '発送済み'])->default('未発送'); // 発送ステータス
-            $table->timestamps(); // 作成日・更新日
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->decimal('total_price', 10, 2);
+            $table->string('status')->default('pending');
+            $table->timestamps();
         });
     }
-    
-     /**
+
+    /**
      * Reverse the migrations.
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('orders');
     }
-    
 };

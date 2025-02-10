@@ -6,40 +6,60 @@
 <div class="product-detail-container">
     <div class="product-images">
         <div class="main-image">
-            <img src="{{ asset('images/products/product1.jpg') }}" alt="メイン商品画像">
-        </div>
-        <div class="sub-images">
-            <div class="sub-image">
-                <img src="{{ asset('images/products/product2.jpg') }}" alt="商品画像1">
-            </div>
-            <div class="sub-image">
-                <img src="{{ asset('images/products/product3.jpg') }}" alt="商品画像2">
-            </div>
-            <div class="sub-image">
-                <img src="{{ asset('images/products/product4.jpg') }}" alt="商品画像3">
-            </div>
-            <div class="sub-image">
-                <img src="{{ asset('images/products/product5.jpg') }}" alt="商品画像4">
-            </div>
-            <div class="sub-image">
-                <img src="{{ asset('images/products/product6.jpg') }}" alt="商品画像5">
-            </div>
-            <div class="sub-image">
-                <img src="{{ asset('images/products/product6.jpg') }}" alt="商品画像6">
-            </div>
+            <img src="{{ $product->getFirstImageUrlAttribute() }}" alt="{{ $product->name }}">
+
         </div>
     </div>
     <div class="product-info">
-        <h2>商品名: サンプル商品A</h2>
-        <p>価格: 1000円</p>
+        <h2>商品名: {{ $product->name }}</h2>
+        <p>価格: {{ number_format($product->price) }}円</p>
+
         <div class="quantity-control">
-            <button type="button" class="quantity-btn">−</button>
-            <input type="number" value="1" min="1" readonly>
-            <button type="button" class="quantity-btn">＋</button>
+            <button type="button" class="quantity-btn" onclick="changeQuantity(-1)">−</button>
+            <input type="number" id="product-quantity" value="1" min="1" readonly>
+            <button type="button" class="quantity-btn" onclick="changeQuantity(1)">＋</button>
         </div>
-        <button class="add-to-cart">カートに入れる</button>
+        <button class="add-to-cart" onclick="addToCart({{ $product->id }})">カートに入れる</button>
+
+
         <div class="product-description">
-            <p>木材の素材感を活かした美しい漆塗りの椀...</p>
+            <p>{{ $product->description }}</p>
         </div>
     </div>
-    @endsection
+</div>
+
+<script>
+    function addToCart(productId) {
+        let quantity = document.getElementById('product-quantity').value;
+
+        fetch('{{ route("cart.add") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    id: productId,
+                    quantity: quantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                window.location.href = "{{ route('cart.index') }}";
+            })
+            .catch(error => console.error('カート追加エラー:', error));
+    }
+
+    function changeQuantity(change) {
+        let quantityInput = document.getElementById('product-quantity');
+        let currentQuantity = parseInt(quantityInput.value);
+        let newQuantity = currentQuantity + change;
+        if (newQuantity < 1) {
+            newQuantity = 1;
+        }
+        quantityInput.value = newQuantity;
+    }
+</script>
+
+@endsection

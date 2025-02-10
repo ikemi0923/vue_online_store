@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # 必要なパッケージのインストールと拡張モジュール追加
 RUN apt-get update && apt-get install -y \

@@ -26,13 +26,18 @@
 
     <div class="order-management-header">
         <h1 class="order-management-title">@yield('pageTitle', '管理者ページ')</h1>
-        @section('orderManagementNav')
         <nav class="order-management-nav">
-            <a href="#" class="order-management-link">管理者トップ</a>
-            <a href="#" class="order-management-link">ログアウト</a>
+            <a href="{{ route('admin.dashboard') }}" class="order-management-link">管理者トップ</a>
+            <a href="{{ route('admin.logout') }}" class="order-management-link"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                ログアウト
+            </a>
         </nav>
-        @show
     </div>
+
+    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
 
 
     <main>

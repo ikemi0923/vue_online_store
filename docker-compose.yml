@@ -8,7 +8,7 @@ services:
     ports:
       - "8000:80" # ホストの8000ポートをコンテナの80ポートにマッピング
     volumes:
-      - ./src:/var/www/html # ソースコードをコンテナと同期
+      - .:/var/www/html # プロジェクト全体を同期
     depends_on:
       - db # MySQLコンテナが起動してからアプリケーションを起動
 
