@@ -29,27 +29,11 @@
                 <h3 class="admin-products-edit-image-title">画像管理</h3>
             </div>
             <div class="admin-products-edit-actions">
+                <input type="file" name="images[]" id="images" multiple accept="image/jpeg, image/png, image/jpg, image/gif" style="display: none;">
+
                 <button type="button" class="admin-products-edit-add-image-button">画像を選択</button>
                 <span class="admin-products-edit-note">（画像はドラッグ＆ドロップで順序変更可能）</span>
             </div>
-<<<<<<< HEAD
-            <div class="admin-products-edit-image-container">
-                <div class="admin-products-edit-image-box" data-id="1">
-                    <img src="{{ asset('images/products/product1.jpg') }}" alt="商品画像1" class="admin-products-edit-image">
-                    <button class="admin-products-edit-delete-image-button">削除</button>
-                </div>
-                <div class="admin-products-edit-image-box" data-id="2">
-                    <img src="{{ asset('images/products/product2.jpg') }}" alt="商品画像2" class="admin-products-edit-image">
-                    <button class="admin-products-edit-delete-image-button">削除</button>
-                </div>
-                <div class="admin-products-edit-image-box" data-id="3">
-                    <img src="{{ asset('images/products/product3.jpg') }}" alt="商品画像3" class="admin-products-edit-image">
-                    <button class="admin-products-edit-delete-image-button">削除</button>
-                </div>
-                <div class="admin-products-edit-image-box" data-id="4">
-                    <img src="{{ asset('images/products/product4.jpg') }}" alt="商品画像4" class="admin-products-edit-image">
-                    <button class="admin-products-edit-delete-image-button">削除</button>
-=======
 
             <div class="admin-products-edit-image-container" id="image-preview-container">
                 @if($product->images->isNotEmpty())
@@ -57,7 +41,6 @@
                 <div class="admin-products-edit-image-box" data-id="{{ $image->id }}">
                     <img src="{{ asset('storage/' . $image->path) }}" alt="商品画像" class="admin-products-edit-image">
                     <button type="button" class="admin-products-edit-delete-image-button" data-image-id="{{ $image->id }}">削除</button>
->>>>>>> aa17340 (バックエンドの更新)
                 </div>
                 @endforeach
                 @endif
