@@ -4,27 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'price', 'stock', 'description'];
+    protected $table = 'products';
 
-    public function image(): HasOne
-    {
-        return $this->hasOne(ProductImage::class, 'product_id');
-    }
+    protected $fillable = ['name', 'price', 'description'];
 
-    public function images(): HasMany
+    public function images()
     {
-        return $this->hasMany(ProductImage::class, 'product_id');
+        return $this->hasMany(ProductImage::class);
     }
 
     public function getFirstImageUrlAttribute()
     {
-        return $this->image ? asset('storage/' . $this->image->path) : asset('images/no-image.png');
+        $firstImage = $this->images()->first();
+        return $firstImage ? Storage::url($firstImage->path) : asset('images/no-image.jpg');
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
 
 class ProductController extends Controller
@@ -15,7 +14,14 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        $product = Product::with('images')->findOrFail($id);
+        $product = Product::with('images')->find($id);
+    
+        if (!$product) {
+            abort(404, '商品が見つかりません');
+        }
+    
         return view('products.show', compact('product'));
     }
+    
+    
 }

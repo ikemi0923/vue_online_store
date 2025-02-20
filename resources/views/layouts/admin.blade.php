@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', '管理者ページ')</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body>
@@ -29,7 +30,7 @@
         <nav class="order-management-nav">
             <a href="{{ route('admin.dashboard') }}" class="order-management-link">管理者トップ</a>
             <a href="{{ route('admin.logout') }}" class="order-management-link"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 ログアウト
             </a>
         </nav>

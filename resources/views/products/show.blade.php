@@ -6,51 +6,57 @@
 <div class="product-detail-container">
     <div class="product-images">
         <div class="main-image">
-            <img src="{{ $product->getFirstImageUrlAttribute() }}" alt="{{ $product->name }}">
-
+            <img id="main-product-image" src="{{ $product->getFirstImageUrlAttribute() }}" alt="{{ $product->name }}">
+        </div>
+        <div class="thumbnail-images">
+            @foreach ($product->images->sortBy('id') as $image)
+            <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $product->name }}" class="thumbnail" onclick="changeMainImage(this)">
+            @endforeach
         </div>
     </div>
     <div class="product-info">
         <h2>商品名: {{ $product->name }}</h2>
         <p>価格: {{ number_format($product->price) }}円</p>
-
         <div class="quantity-control">
             <button type="button" class="quantity-btn" onclick="changeQuantity(-1)">−</button>
             <input type="number" id="product-quantity" value="1" min="1" readonly>
             <button type="button" class="quantity-btn" onclick="changeQuantity(1)">＋</button>
         </div>
         <button class="add-to-cart" onclick="addToCart({{ $product->id }})">カートに入れる</button>
-
-
         <div class="product-description">
             <p>{{ $product->description }}</p>
         </div>
+        <div class="product-detail-back">
+            <button class="product-detail-back-button" onclick="addToCart({{ $product->id }})">戻る</button>
+        </div>
     </div>
 </div>
-
 <script>
     function addToCart(productId) {
-        let quantity = document.getElementById('product-quantity').value;
-
-        fetch('{{ route("cart.add") }}', {
+        fetch("{{ url('/cart/add') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': document.querySelector("meta[name='csrf-token']").getAttribute("content")
                 },
                 body: JSON.stringify({
-                    id: productId,
-                    quantity: quantity
+                    product_id: productId,
+                    quantity: document.getElementById('product-quantity').value
                 })
             })
             .then(response => response.json())
             .then(data => {
-                alert(data.message);
-                window.location.href = "{{ route('cart.index') }}";
+                if (data.error) {
+                    alert("エラー: " + data.error);
+                } else {
+                    alert("✅ 商品がカートに追加されました");
+                    window.location.href = "/cart";
+                }
             })
-            .catch(error => console.error('カート追加エラー:', error));
+            .catch(error => {
+                alert("カートに追加できませんでした。");
+            });
     }
-
     function changeQuantity(change) {
         let quantityInput = document.getElementById('product-quantity');
         let currentQuantity = parseInt(quantityInput.value);
@@ -60,6 +66,8 @@
         }
         quantityInput.value = newQuantity;
     }
+    function changeMainImage(element) {
+        document.getElementById("main-product-image").src = element.src;
+    }
 </script>
-
 @endsection

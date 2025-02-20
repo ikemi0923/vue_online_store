@@ -9,7 +9,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $products = Product::with('image')->orderBy('created_at', 'desc')->take(8)->get();
+        $products = Product::with(['images' => function ($query) {
+            $query->orderBy('order')->limit(1);
+        }])->orderBy('created_at', 'desc')->get();
+    
         return view('home', compact('products'));
     }
+    
 }

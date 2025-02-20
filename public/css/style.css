@@ -12,7 +12,7 @@ body {
 }
 
 main {
-    flex: 1;
+    flex-grow: 1;
 }
 
 @media (max-width: 768px) {}
@@ -411,19 +411,6 @@ main {
     font-size: 1rem;
 }
 
-.cart-checkout-button {
-    width: 300px;
-    margin: 0 auto;
-    padding: 12px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    background-color: #333;
-    color: white;
-    border: none;
-    text-align: center;
-    cursor: pointer;
-}
-
 .cart-item-delete {
     background-color: #e74c3c;
     color: white;
@@ -540,7 +527,7 @@ main {
     padding: 15px;
     font-size: 16px;
     color: #ffffff;
-    background-color: #007bff;
+    background-color: #333;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -548,7 +535,7 @@ main {
 }
 
 .confirm-order-button:hover {
-    background-color: #0056b3;
+    background-color: #444;
 }
 
 #credit-card-details {
@@ -2395,7 +2382,7 @@ main {
     padding: 12px;
     font-size: 1.2rem;
     color: #fff;
-    background-color: #007bff;
+    background-color: #333;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -2403,7 +2390,7 @@ main {
 }
 
 .confirm-order-button:hover {
-    background-color: #0056b3;
+    background-color: #444;
 }
 
 @media (max-width: 768px) {
@@ -2647,16 +2634,6 @@ main {
     font-weight: bold;
 }
 
-.cart-checkout-button {
-    display: block;
-    margin: 0 auto;
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
 
 @media (max-width: 768px) {
     .cart-item {
@@ -2685,7 +2662,8 @@ main {
         text-align: center;
     }
 
-    .cart-checkout-button {
+    .cart-checkout-button,
+    .cart-back-button {
         width: 100%;
     }
 }
@@ -2724,7 +2702,7 @@ main {
 
 .admin-dashboard-search select:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #333;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
@@ -2934,7 +2912,7 @@ main {
 
 .admin-products-add-button {
     padding: 8px 16px;
-    background-color: #007bff;
+    background-color: #333;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -2976,7 +2954,7 @@ main {
 
 .admin-products-add-button {
     padding: 8px 16px;
-    background-color: #007bff;
+    background-color: #333;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -3112,9 +3090,219 @@ main {
     top: 50%;
     transform: translateY(-50%);
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #333;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.thumbnail-images img {
+    width: 80px;
+    height: 80px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.product-detail-back {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.product-detail-back-button {
+    background-color: #ccc;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.product-detail-back-button:hover {
+    background-color: #bbb;
+}
+
+.cart-back-button,
+.cart-checkout-button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cart-back-button,
+.cart-checkout-button {
+    width: 300px;
+    margin: 0 auto;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background-color: #333;
+    color: white;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+.cart-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.cart-button {
+    width: auto;
+    min-width: 150px;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.admin-pagination-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.admin-pagination {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 8px;
+    padding: 0;
+}
+
+.admin-pagination li {
+    display: inline-block;
+}
+
+.admin-pagination a {
+    text-decoration: none;
+    padding: 10px 15px;
+    color: white;
+    background-color: black;
+    border-radius: 5px;
+}
+
+.admin-pagination .active span {
+    background-color: gray;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+.admin-pagination .disabled span {
+    color: gray;
+    padding: 10px 15px;
+}
+
+.admin-pagination-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.admin-pagination {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 8px;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+.admin-pagination li {
+    display: inline-block;
+}
+
+.admin-pagination a {
+    text-decoration: none;
+    padding: 10px 15px;
+    color: white;
+    background-color: black;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.admin-pagination .active span {
+    background-color: gray;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.admin-pagination .disabled span {
+    color: gray;
+    padding: 10px 15px;
+}
+
+@media (max-width: 768px) {
+    .admin-pagination {
+        gap: 4px;
+    }
+    .admin-pagination a, 
+    .admin-pagination .active span, 
+    .admin-pagination .disabled span {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .cart-item {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+    .cart-item-price {
+        font-size: 1rem;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 5px;
+        display: block;
+    }
+    .cart-item-delete {
+        width: auto;
+        margin-left: 0;
+    }
+}
+
+
+@media (max-width: 1023px) {
+    .admin-products-add-image-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+.admin-products-add-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: relative !important;
+}
+
+.admin-products-add-delete-image-button {
+    display: block;
+    width: 100%;
+    position: static !important;
+    margin-top: 10px;
+}
+
+.admin-products-add-buttons {
+    display: flex;
+    gap: 10px;
+    position: static !important;
+    margin-top: 20px;
 }

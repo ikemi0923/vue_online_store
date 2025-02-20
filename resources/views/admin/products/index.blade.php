@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', '商品管理ページ')
+@section('title', '商品管理')
 
 @section('content')
 
@@ -12,26 +12,22 @@
     });
 </script>
 @endif
-
 <div class="product-management-container">
     <div class="products-header-container">
         <h2 class="products-index-title">商品一覧</h2>
         <a href="{{ route('admin.products.add') }}" class="admin-products-add-button">商品追加</a>
     </div>
-
     <div class="admin-products-list">
         @if (isset($products) && $products->isEmpty())
         <p>商品がありません。</p>
         @else
         @foreach ($products as $product)
         <div class="admin-product-item">
+            @if ($product->firstImage)
             <div class="product-image">
-                @if ($product->images->isNotEmpty())
-                <img src="{{ asset('storage/' . $product->images->first()->path) }}" alt="商品画像">
-                @else
-                <img src="{{ asset('images/no-image.png') }}" alt="画像なし">
-                @endif
+                <img src="{{ $product->first_image_url }}" alt="商品画像">
             </div>
+            @endif
             <div class="product-details">
                 <p><strong>商品名:</strong> {{ $product->name }}</p>
                 <p><strong>価格:</strong> {{ number_format($product->price) }}円</p>
@@ -42,7 +38,6 @@
                 <form action="{{ route('admin.products.edit', $product->id) }}" method="GET" style="display:inline;">
                     <button type="submit" class="admin-products-edit-button">編集</button>
                 </form>
-
                 <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
@@ -52,6 +47,9 @@
         </div>
         @endforeach
         @endif
+    </div>
+    <div class="admin-pagination-container">
+        {{ $products->links('vendor.pagination.admin') }}
     </div>
 </div>
 @endsection

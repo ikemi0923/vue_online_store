@@ -6,9 +6,9 @@
       <p>住所: 〒160-0022 東京都新宿区新宿1丁目9-10 サンモールクレスト5F</p>
     </div>
     <div class="footer-icons">
-      <a href="#"><img src="{{ asset('images/icons/instagram.png') }}" alt="Instagram"></a>
-      <a href="#"><img src="{{ asset('images/icons/threads.png') }}" alt="TikTok"></a>
-      <a href="#"><img src="{{ asset('images/icons/x.png') }}" alt="Twitter"></a>
+      <a href="https://www.instagram.com/vuetech.inc2018/?hl=ja"><img src="{{ asset('images/icons/instagram.png') }}" alt="Instagram"></a>
+      <a href="https://www.tiktok.com/"><img src="{{ asset('images/icons/threads.png') }}" alt="TikTok"></a>
+      <a href="https://x.com/vuetech2?s=11&t=VGffILFdU6R6AoxLbtjVew"><img src="{{ asset('images/icons/x.png') }}" alt="Twitter"></a>
     </div>
   </div>
   <div class="footer-map">

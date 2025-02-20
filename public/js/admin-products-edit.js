@@ -1,12 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-    if (typeof Sortable !== "function") {
-        return;
-    }
-
     const imageContainer = document.querySelector(".admin-products-edit-image-container");
     const fileInput = document.getElementById("images");
     const selectImageButton = document.querySelector(".admin-products-edit-add-image-button");
-    const noImagesMessage = document.getElementById("no-images-message");
+    const form = document.querySelector(".admin-products-edit-form");
 
     if (imageContainer) {
         new Sortable(imageContainer, {
@@ -17,13 +13,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+
     selectImageButton.addEventListener("click", function () {
         fileInput.click();
     });
+
     fileInput.addEventListener("change", function () {
-        if (noImagesMessage) {
-            noImagesMessage.style.display = "none";
-        }
         Array.from(fileInput.files).forEach((file) => {
             const reader = new FileReader();
             reader.onload = function (e) {
@@ -31,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 div.classList.add("admin-products-edit-image-box");
                 div.innerHTML = `
                     <img src="${e.target.result}" alt="プレビュー画像" class="admin-products-edit-image">
-                    <button type="button" class="admin-products-edit-delete-image-button">削除</button>
+                    <button type="button" class="admin-products-edit-delete-image-button" data-image-id="">削除</button>
                 `;
                 imageContainer.appendChild(div);
                 saveImageOrder();
@@ -43,64 +38,112 @@ document.addEventListener("DOMContentLoaded", function () {
     imageContainer.addEventListener("click", function (e) {
         if (e.target.classList.contains("admin-products-edit-delete-image-button")) {
             const imageBox = e.target.closest(".admin-products-edit-image-box");
-            const imageId = e.target.dataset.imageId;
+            const imageId = e.target.dataset.imageId || null;
+
             if (!confirm("本当にこの画像を削除しますか？")) {
                 return;
             }
-            Ï
+
+            if (imageBox) {
+                imageBox.remove();
+                updateNoImagesMessage();
+            }
+
             if (imageId) {
-                fetch(`/admin/products/delete-image/${imageId}`, {
+                fetch(`/admin/products/image/${imageId}`, {
                         method: "DELETE",
                         headers: {
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-                        },
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                        }
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            imageBox.remove();
-                            saveImageOrder();
-                        } else {
-                            alert("画像の削除に失敗しました");
+
                         }
                     })
-                    .catch(() => alert("エラーが発生しました"));
-            } else {
-                imageBox.remove();
-                saveImageOrder();
-            }
+                    .catch(error => {
 
-            if (imageContainer.children.length === 0) {
-                noImagesMessage.style.display = "block";
+                    });
             }
         }
     });
 
-    function saveImageOrder() {
-        const images = Array.from(imageContainer.children).map((item, index) => ({
-            id: item.dataset.id || null,
-            src: item.querySelector("img").src,
-            order: index
-        }));
-        localStorage.setItem("product_images", JSON.stringify(images));
-    }
 
-    function loadSavedImages() {
-        const savedImages = JSON.parse(localStorage.getItem("product_images") || "[]");
-        if (savedImages.length > 0) {
-            imageContainer.innerHTML = "";
-            savedImages.forEach(img => {
-                const div = document.createElement("div");
-                div.classList.add("admin-products-edit-image-box");
-                div.dataset.id = img.id;
-                div.innerHTML = `
-                    <img src="${img.src}" alt="商品画像" class="admin-products-edit-image">
-                    <button type="button" class="admin-products-edit-delete-image-button">削除</button>
-                `;
-                imageContainer.appendChild(div);
-            });
+    function updateNoImagesMessage() {
+        const noImagesMessage = document.getElementById("no-images-message");
+        const imageBoxes = document.querySelectorAll(".admin-products-edit-image-box");
+
+        if (imageBoxes.length === 0 && noImagesMessage) {
+            noImagesMessage.style.display = "block";
+        } else if (noImagesMessage) {
+            noImagesMessage.style.display = "none";
         }
     }
 
-    loadSavedImages();
+    function saveImageOrder() {
+        const imageOrder = [];
+        document.querySelectorAll(".admin-products-edit-image-box").forEach((box, index) => {
+            const imageId = box.dataset.imageId;
+            if (imageId) {
+                imageOrder.push({
+                    id: parseInt(imageId, 10),
+                    order: index + 1
+                });
+            }
+        });
+
+        if (imageOrder.length === 0) {
+
+        }
+
+        fetch("/admin/products/update-image-order", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    images: imageOrder
+                })
+            })
+            .then(response => response.json())
+            .catch(error => {
+                
+            });
+    }
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+
+        if (fileInput.files.length > 0) {
+            for (let file of fileInput.files) {
+                formData.append("images[]", file);
+            }
+        }
+
+        fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    "Accept": "application/json"
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("更新が成功しました！");
+                    window.location.href = "/admin/products";
+                } else {
+                    alert("更新に失敗しました。");
+                }
+            })
+            .catch(error => {
+                alert("サーバーとの通信に失敗しました。");
+            });
+
+    });
 });

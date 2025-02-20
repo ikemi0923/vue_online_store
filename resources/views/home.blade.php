@@ -12,13 +12,12 @@
     @endfor
     </div>
 </section>
-
 <section class="products grid">
     @foreach ($products as $product)
     <div class="product">
         <div class="product-item">
             <a href="{{ route('products.show', $product->id) }}">
-                <img src="{{ $product->getFirstImageUrlAttribute() }}" alt="{{ $product->name }}">
+                <img src="{{ $product->first_image_url }}" alt="{{ $product->name }}">
                 <div class="product-hover">
                     <p>{{ $product->name }}</p>
                     <p>¥{{ number_format($product->price) }}</p>
@@ -31,7 +30,6 @@
     </div>
     @endforeach
 </section>
-
 <section class="campaign-banner" style="margin: 0; padding: 0;">
     <a href="#" style="display: block; margin: 0; padding: 0;">
         <img src="{{ asset('images/banners/campaign-banner.jpg') }}" alt="キャンペーンバナー" style="width: 100%; height: auto; display: block; margin: 0; padding: 0;">

@@ -53,27 +53,22 @@
             </div>
 
             <div class="admin-products-add-image-container" id="image-preview-container">
-                <p class="no-images-message" id="no-images-message"
-                    @if(isset($product) && $product->images->isNotEmpty()) style="display: none;" @endif>
-                    画像はまだありません。
-                </p>
-                @if(isset($product) && $product->images->isNotEmpty())
-                @foreach ($product->images->sortBy('order') as $image)
-                <img src="{{ asset('storage/' . $image->path) }}" alt="商品画像">
-                @endforeach
-                @endif
-
-            </div>
+    <p class="no-images-message" id="no-images-message"
+        @if(isset($product) && $product->images->isNotEmpty()) style="display: none;" @endif>
+        画像はまだありません。
+    </p>
+    @if(isset($product) && $product->images->isNotEmpty())
+    @foreach ($product->images->sortBy('order') as $image)
+    <img src="{{ asset('storage/' . $image->path) }}" alt="商品画像" class="admin-products-add-image">
+    @endforeach
+    @endif
+</div>
 
             <div class="admin-products-add-buttons">
                 <button type="submit" class="admin-products-add-submit-button">追加</button>
                 <form action="{{ route('admin.dashboard') }}" method="GET" style="display:inline;">
                     <button type="submit" class="admin-products-add-back-button">戻る</button>
                 </form>
-
-
-
-
             </div>
     </form>
 </div>

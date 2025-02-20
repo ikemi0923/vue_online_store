@@ -22,21 +22,47 @@ class Order extends Model
 
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::class);
-    }
-
-    public function getPaymentMethodLabelAttribute()
-    {
-        $methods = [
-            'cash' => '代引き',
-            'credit_card' => 'クレジットカード',
-            'bank_transfer' => '銀行振込'
-        ];
-        return $methods[$this->payment_method] ?? '不明';
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getPaymentMethodLabelAttribute()
+    {
+        $paymentMapping = [
+            'credit_card' => 'クレジットカード',
+            'cash' => '代金引換',
+            'bank' => '銀行振込',
+        ];
+
+        return $paymentMapping[$this->payment_method] ?? '不明';
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return match ($this->status) {
+            'pending' => '未発送',
+            'preparing' => '発送準備中',
+            'completed' => '発送済み',
+            default => '不明',
+        };
+    }
+
+    function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    public function scopePreparing($query)
+    {
+        return $query->where('status', 'preparing');
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
     }
 }

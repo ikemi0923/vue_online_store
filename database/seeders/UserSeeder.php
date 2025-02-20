@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
 
         for ($i = 1; $i <= 10; $i++) {
             $users[] = [
-                'id' => $i, // ✅ 明示的に `id` を指定
+                'id' => $i,
                 'name' => "User {$i}",
                 'furigana' => "ユーザー{$i}",
                 'zip' => "100000{$i}",
@@ -34,4 +34,3 @@ class UserSeeder extends Seeder
         DB::table('users')->insert($users);
     }
 }
-

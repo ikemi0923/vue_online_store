@@ -1,77 +1,104 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const orderButton = document.querySelector(".confirm-order-button");
-    const paymentOptions = document.querySelectorAll("input[name='payment_option']");
+
+window.togglePaymentFields = function () {
+    const selectedPayment = document.querySelector("input[name='payment_option']:checked") ?.value;
     const creditCardDetails = document.getElementById("credit-card-details");
+    if (creditCardDetails) {
+        creditCardDetails.style.display = selectedPayment === "credit" ? "block" : "none";
+    }
+};
 
-    window.togglePaymentFields = function () {
-        const selectedPayment = document.querySelector("input[name='payment_option']:checked") ?.value;
-        if (selectedPayment === "credit") {
-            creditCardDetails.style.display = "block";
-        } else {
-            creditCardDetails.style.display = "none";
-        }
-    };
-
-    paymentOptions.forEach(option => {
-        option.addEventListener("change", togglePaymentFields);
-    });
-
-    togglePaymentFields();
-
-    window.confirmOrder = function () {
-        let formValid = true;
-        const requiredFields = document.querySelectorAll("input[required]");
-
-        requiredFields.forEach(field => {
-            field.classList.remove("checkout-error-input");
-        });
-
-        requiredFields.forEach(field => {
-            if (!field.value.trim()) {
-                formValid = false;
-                field.classList.add("checkout-error-input");
+function syncCartData() {
+    fetch("/cart/data", {
+            method: "GET",
+            credentials: "include"
+        })
+        .then(response => response.json())
+        .then(cartData => {
+            if (cartData.cart && Object.keys(cartData.cart).length > 0) {
+                localStorage.setItem("cart", JSON.stringify(cartData.cart));
+            } else {
+                localStorage.removeItem("cart");
             }
         });
+}
 
-        if (!formValid) {
-            alert("入力に誤りがあります。修正してください。");
-            return;
-        }
-        const csrfToken = document.querySelector("meta[name='csrf-token']") ?.getAttribute("content");
-        if (!csrfToken) {
-            alert("⚠️ CSRFトークンが見つかりません。リロードして再試行してください。");
-            return;
-        }
+window.confirmOrder = function () {
+    
+    let nameElement = document.getElementById("name");
+    let kanaElement = document.getElementById("kana");
+    let zip1Element = document.getElementById("zip1");
+    let zip2Element = document.getElementById("zip2");
+    let addressPrefectureElement = document.getElementById("address-prefecture");
+    let addressCityElement = document.getElementById("address-city");
+    let phone1Element = document.getElementById("phone1");
+    let phone2Element = document.getElementById("phone2");
+    let phone3Element = document.getElementById("phone3");
 
-        fetch("/order/confirm", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": csrfToken
-                },
-                body: JSON.stringify({
-                    name: document.getElementById("name").value,
-                    kana: document.getElementById("kana").value,
-                    zip1: document.getElementById("zip1").value,
-                    zip2: document.getElementById("zip2").value,
-                    address_prefecture: document.getElementById("address-prefecture").value,
-                    address_city: document.getElementById("address-city").value,
-                    phone1: document.getElementById("phone1").value,
-                    phone2: document.getElementById("phone2").value,
-                    phone3: document.getElementById("phone3").value,
-                    payment_option: document.querySelector("input[name='payment_option']:checked") ?.value
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
+    if (!nameElement || !zip1Element || !phone1Element) {
+        alert("⚠️ フォームの入力欄が正しくありません。ページをリロードして再試行してください。");
+        return;
+    }
+
+    let name = nameElement.value;
+    let kana = kanaElement ? kanaElement.value : "";
+    let zip1 = zip1Element.value;
+    let zip2 = zip2Element.value;
+    let addressPrefecture = addressPrefectureElement ? addressPrefectureElement.value : "";
+    let addressCity = addressCityElement ? addressCityElement.value : "";
+    let phone1 = phone1Element.value;
+    let phone2 = phone2Element.value;
+    let phone3 = phone3Element.value;
+
+    let paymentOptionElement = document.querySelector("input[name='payment_option']:checked");
+    let paymentOption = paymentOptionElement ? paymentOptionElement.value : null;
+
+    if (!paymentOption) {
+        alert("⚠️ 支払い方法を選択してください");
+        return;
+    }
+
+    let orderData = {
+        name: name,
+        kana: kana,
+        zip1: zip1,
+        zip2: zip2,
+        address_prefecture: addressPrefecture,
+        address_city: addressCity,
+        phone1: phone1,
+        phone2: phone2,
+        phone3: phone3,
+        payment_option: paymentOption,
+        cart: JSON.parse(localStorage.getItem("cart"))
+    };
+
+    fetch("/order/confirm", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector("meta[name='csrf-token']").getAttribute("content")
+            },
+            body: JSON.stringify(orderData)
+        })
+        .then(response => response.text())
+        .then(data => {
+            try {
+                let jsonData = JSON.parse(data);
+                if (jsonData.success) {
+                    alert("✅ 注文が完了しました！");
+                    localStorage.removeItem("cart");
                     window.location.href = "/order/complete";
                 } else {
-                    alert("バリデーションエラー: " + JSON.stringify(data.errors));
+                    alert("❌ 入力項目に誤りがあります ");
                 }
-            })
-            .catch(error => {
-                alert("注文処理に失敗しました。再度お試しください。");
-            });
-    };
+            } catch (error) {
+                alert("⚠️ サーバーから不正なレスポンスが返されました。");
+            }
+        })
+        .catch(error => {
+            alert("⚠️ サーバーとの通信に問題があります。");
+        });
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+    syncCartData();
 });

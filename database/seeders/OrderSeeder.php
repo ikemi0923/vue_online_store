@@ -8,40 +8,24 @@ use Carbon\Carbon;
 
 class OrderSeeder extends Seeder
 {
-    public function index(Request $request)
-{
-
-    $query = Order::query();
-    if ($request->has('search')) {
-        $search = $request->input('search');
-        $query->where('id', $search)
-              ->orWhereHas('user', function ($q) use ($search) {
-                  $q->where('name', 'like', "%{$search}%");
-              });
-    }
-
-    $orders = $query->orderBy('created_at', 'desc')->paginate(10);
-
-    return view('admin.orders.index', compact('orders'));
-}
     public function run(): void
     {
         $users = DB::table('users')->pluck('id')->toArray();
 
-        if (count($users) < 10) {
-            $users = array_merge($users, range(count($users) + 1, 10));
+        if (empty($users)) {
+            return;
         }
 
         $orders = [];
 
         for ($i = 0; $i < 10; $i++) {
             $orders[] = [
-                'user_id' => $users[$i],
+                'user_id' => $users[array_rand($users)],
                 'name' => "注文者 " . ($i + 1),
-                'furigana' => "ちゅうもんしゃ " . ($i + 1),
-                'zip' => "200000" . $i,
-                'address' => "東京都区" . $i,
-                'phone' => "0801234567" . $i,
+                'furigana' => "チュウモンシャ " . ($i + 1),
+                'zip' => "200-" . str_pad($i, 3, '0', STR_PAD_LEFT), 
+                'address' => "東京都区" . ($i + 1),
+                'phone' => "080-1234-567" . $i,
                 'payment_method' => ($i % 2 == 0) ? 'クレジットカード' : '銀行振込',
                 'status' => ($i % 3 == 0) ? 'completed' : 'pending',
                 'total_price' => rand(1000, 10000),

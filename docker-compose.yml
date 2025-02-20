@@ -1,18 +1,16 @@
 version: '3'
 
 services:
-  # Laravelを動かすコンテナ
   app:
     container_name: vue_online_store_app
     build: ./docker/app
     ports:
-      - "8000:80" # ホストの8000ポートをコンテナの80ポートにマッピング
+      - "8000:80"
     volumes:
-      - .:/var/www/html # プロジェクト全体を同期
+      - .:/var/www/html
     depends_on:
-      - db # MySQLコンテナが起動してからアプリケーションを起動
+      - db
 
-  # MySQLを動かすコンテナ
   db:
     image: mysql:8.0
     container_name: vue_online_store_db
@@ -24,27 +22,25 @@ services:
       TZ: 'Asia/Tokyo'
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
-      - ./docker/db/volume:/var/lib/mysql # データ永続化
-      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf # 設定ファイル
+      - ./docker/db/volume:/var/lib/mysql
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
-      - "3306:3306" # ホストとコンテナのMySQLポートをマッピング
+      - "3306:3306"
 
-  # phpMyAdminを動かすコンテナ
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: vue_online_store_phpmyadmin
     environment:
-      PMA_HOST: db # MySQLコンテナ名を指定
+      PMA_HOST: vue_online_store_db
       PMA_PORT: 3306
     ports:
-      - "8080:80" # phpMyAdminにアクセスするためのポート
+      - "8080:80"
     depends_on:
-      - db # MySQLコンテナが先に起動
+      - db
 
-  # Mailpitを動かすコンテナ（ローカルメールサーバ）
   mailpit:
     image: axllent/mailpit
     container_name: vue_online_store_mailpit
     ports:
-      - "1025:1025" # SMTP用ポート
-      - "8025:8025" # Mailpit UI用ポート
+      - "1025:1025"
+      - "8025:8025"
