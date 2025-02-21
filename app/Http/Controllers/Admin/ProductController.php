@@ -125,12 +125,8 @@ class ProductController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => '商品が更新されました！',
-                'product_id' => $product->id,
-                'uploaded_images' => $uploadedImages
-            ]);
+            return redirect()->route('admin.products.index')->with('success', '商品が更新されました！');
+
         } catch (Exception $e) {
             DB::rollBack();
 

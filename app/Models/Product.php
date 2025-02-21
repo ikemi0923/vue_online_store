@@ -12,7 +12,7 @@ class Product extends Model
 
     protected $table = 'products';
 
-    protected $fillable = ['name', 'price', 'description'];
+    protected $fillable = ['name', 'price', 'stock', 'description'];
 
     public function images()
     {
@@ -24,4 +24,5 @@ class Product extends Model
         $firstImage = $this->images()->first();
         return $firstImage ? Storage::url($firstImage->path) : asset('images/no-image.jpg');
     }
+    
 }

@@ -23,11 +23,9 @@
         @else
         @foreach ($products as $product)
         <div class="admin-product-item">
-            @if ($product->firstImage)
             <div class="product-image">
-                <img src="{{ $product->first_image_url }}" alt="商品画像">
+                <img src="{{ $product->first_image_url }}" alt="{{ $product->name }}">
             </div>
-            @endif
             <div class="product-details">
                 <p><strong>商品名:</strong> {{ $product->name }}</p>
                 <p><strong>価格:</strong> {{ number_format($product->price) }}円</p>

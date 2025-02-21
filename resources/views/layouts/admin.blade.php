@@ -20,7 +20,7 @@
         </div>
         <nav class="nav">
             <ul>
-                <li><a href="{{ url('/admin/login') }}">管理者ログイン</a></li>
+                <li><a href="{{ url('/admin/login') }}">ログイン</a></li>
             </ul>
         </nav>
     </div>

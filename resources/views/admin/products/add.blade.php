@@ -44,33 +44,28 @@
 
             <div class="admin-products-add-actions">
                 <input type="file" name="images[]" id="images" multiple accept="image/jpeg, image/png, image/jpg, image/gif" style="display: none;">
-
                 <label for="images" class="admin-products-add-add-image-button">画像を選択</label>
-
-
-
                 <span class="admin-products-add-note">（画像はドラッグ＆ドロップで順序変更可能）</span>
             </div>
 
             <div class="admin-products-add-image-container" id="image-preview-container">
-    <p class="no-images-message" id="no-images-message"
-        @if(isset($product) && $product->images->isNotEmpty()) style="display: none;" @endif>
-        画像はまだありません。
-    </p>
-    @if(isset($product) && $product->images->isNotEmpty())
-    @foreach ($product->images->sortBy('order') as $image)
-    <img src="{{ asset('storage/' . $image->path) }}" alt="商品画像" class="admin-products-add-image">
-    @endforeach
-    @endif
-</div>
-
-            <div class="admin-products-add-buttons">
-                <button type="submit" class="admin-products-add-submit-button">追加</button>
-                <form action="{{ route('admin.dashboard') }}" method="GET" style="display:inline;">
-                    <button type="submit" class="admin-products-add-back-button">戻る</button>
-                </form>
+                <p class="no-images-message" id="no-images-message"
+                    @if(isset($product) && $product->images->isNotEmpty()) style="display: none;" @endif>
+                    画像はまだありません。
+                </p>
+                @if(isset($product) && $product->images->isNotEmpty())
+                @foreach ($product->images->sortBy('order') as $image)
+                <img src="{{ asset('storage/' . $image->path) }}" alt="商品画像" class="admin-products-add-image">
+                @endforeach
+                @endif
             </div>
     </form>
+    <div class="admin-products-add-buttons">
+        <button class="admin-products-add-submit-button" id="submit-btn">追加</button>
+        <form action="{{ route('admin.dashboard') }}" method="GET" style="display:inline;">
+            <button type="submit" class="admin-products-add-back-button">戻る</button>
+        </form>
+    </div>
 </div>
 
 <script src="{{ asset('js/Sortable.min.js') }}"></script>

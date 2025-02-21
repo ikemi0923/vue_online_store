@@ -3,6 +3,9 @@
 @section('title', '商品編集')
 
 @section('content')
+@if(session('success'))
+        {{ session('success') }}
+@endif
 
 <div class="admin-products-edit-container">
     <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data"
@@ -28,10 +31,8 @@
                 <h3 class="admin-products-edit-image-title">画像管理</h3>
             </div>
             <div class="admin-products-edit-actions">
-                <input type="file" name="images[]" id="images" multiple
-                    accept="image/jpeg, image/png, image/jpg, image/gif, image/webp"
-                    style="display: none;">
-                <button type="button" class="admin-products-edit-add-image-button">画像を選択</button>
+                <input type="file" name="images[]" id="images" multiple accept="image/jpeg, image/png, image/jpg, image/gif" style="display: none;">
+                <label for="images" class="admin-products-edit-add-image-button">画像を選択</label>
                 <span class="admin-products-edit-note">（画像はドラッグ＆ドロップで順序変更可能）</span>
             </div>
             <div class="admin-products-edit-image-container" id="image-preview-container">
@@ -45,10 +46,13 @@
                 @endif
             </div>
         </div>
-        <div class="admin-products-edit-buttons">
-            <button type="submit" class="admin-products-edit-submit-button">更新</button>
-            <button type="button" onclick="handleBack()" class="admin-products-edit-back-button">戻る</button>
-        </div>
+    </form>
+    <div class="admin-products-edit-buttons">
+        <button class="admin-products-edit-submit-button" id="submit-btn">更新</button>
+        <form action="{{ route('admin.dashboard') }}" method="GET" style="display:inline;">
+            <button type="submit" class="admin-products-add-back-button">戻る</button>
+        </form>
+    </div>
     </form>
 </div>
 <script src="{{ asset('js/Sortable.min.js') }}"></script>
@@ -62,4 +66,11 @@
         }
     }
 </script>
+<script>
+document.getElementById("submit-btn").addEventListener("click", function () {
+    document.querySelector(".admin-products-edit-form").submit();
+});
+
+</script>
+
 @endsection

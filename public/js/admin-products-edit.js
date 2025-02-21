@@ -14,10 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    selectImageButton.addEventListener("click", function () {
-        fileInput.click();
-    });
-
     fileInput.addEventListener("change", function () {
         Array.from(fileInput.files).forEach((file) => {
             const reader = new FileReader();
@@ -109,7 +105,6 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(response => response.json())
             .catch(error => {
-                
             });
     }
 
