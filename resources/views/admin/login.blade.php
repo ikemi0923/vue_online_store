@@ -3,6 +3,9 @@
 @section('title', '管理者ログイン')
 
 @section('content')
+@php
+    $prefix = app()->environment('production') ? '/laravel' : '';
+@endphp
 <div class="admin-login-wrapper">
   @if(session('success'))
   <script>
@@ -18,7 +21,7 @@
     </ul>
   </div>
   @endif
-  <form action="{{ route('admin.login.submit') }}" method="POST" class="admin-login-form">
+  <form action="{{ $prefix }}{{ route('admin.login.submit') }}" method="POST" class="admin-login-form">
     @csrf
     <div class="admin-login-form-group">
       <label for="email" class="admin-login-label">メールアドレス:</label>

@@ -3,6 +3,10 @@
 @section('title', '管理者トップページ')
 
 @section('content')
+@php
+    $prefix = app()->environment('production') ? '/laravel' : '';
+@endphp
+
 @if(session('success'))
 <script>
     alert("{{ session('success') }}");
@@ -12,11 +16,11 @@
 <main class="admin-dashboard-main">
     <div class="admin-dashboard-container">
         <div class="admin-dashboard-buttons">
-            <a href="{{ route('admin.products.index') }}" class="admin-dashboard-button">商品管理</a>
-            <a href="{{ route('admin.orders.index') }}" class="admin-dashboard-button">注文管理</a>
+            <a href="{{ $prefix }}{{ route('admin.products.index') }}" class="admin-dashboard-button">商品管理</a>
+            <a href="{{ $prefix }}{{ route('admin.orders.index') }}" class="admin-dashboard-button">注文管理</a>
         </div>
         <div class="admin-dashboard-search">
-            <form action="{{ route('admin.orders.index') }}" method="GET">
+            <form action="{{ $prefix }}{{ route('admin.orders.index') }}" method="GET">
                 <label for="name">名前</label>
                 <input type="text" name="name" id="name" class="admin-dashboard-input" value="{{ request('name') }}" placeholder="名前">
                 <label for="phone">電話番号</label>
@@ -54,7 +58,7 @@
                     <td>{{ $order->user_id ? $order->user->furigana : $order->furigana }}</td>
                     <td>{{ $order->status_label }}</td>
                     <td>
-                        <a href="{{ route('admin.orders.show', $order->id) }}" class="admin-dashboard-detail-button">詳細</a>
+                        <a href="{{ $prefix }}{{ route('admin.orders.show', $order->id) }}" class="admin-dashboard-detail-button">詳細</a>
                     </td>
                 </tr>
                 @endif

@@ -3,7 +3,9 @@
 @section('title', '注文一覧')
 
 @section('content')
-
+@php
+    $prefix = app()->environment('production') ? '/laravel' : '';
+@endphp
 <main class="orders-index-page">
     <div class="orders-index-container">
         <h2 class="orders-index-title">注文一覧</h2>
@@ -33,7 +35,7 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('admin.orders.show', $order->id) }}" class="orders-detail-button">詳細</a>
+                        <a href="{{ $prefix }}{{ route('admin.orders.show', $order->id) }}" class="orders-detail-button">詳細</a>
                     </td>
                 </tr>
                 @endforeach
@@ -42,8 +44,6 @@
         <div class="orders-pagination">
             {{ $orders->links('vendor.pagination.admin') }}
         </div>
-
     </div>
 </main>
-
 @endsection

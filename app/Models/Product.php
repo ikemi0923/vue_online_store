@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -22,7 +23,15 @@ class Product extends Model
     public function getFirstImageUrlAttribute()
     {
         $firstImage = $this->images()->first();
-        return $firstImage ? Storage::url($firstImage->path) : asset('images/no-image.jpg');
+        if ($firstImage) {
+            $url = Storage::url($firstImage->path);
+            if (app()->environment('production')) {
+                if (!Str::startsWith($url, '/laravel')) {
+                    $url = '/laravel' . $url;
+                }
+            }
+            return $url;
+        }
+        return asset('images/no-image.jpg');
     }
-    
 }

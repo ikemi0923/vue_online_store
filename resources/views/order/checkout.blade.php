@@ -3,6 +3,9 @@
 @section('title', '購入手続き')
 
 @section('content')
+@php
+    $prefix = app()->environment('production') ? '/laravel' : '';
+@endphp
 <div class="order-checkout-container">
   <h2 class="order-checkout-title">注文者情報</h2>
   <form class="order-checkout-form" id="orderForm">
@@ -62,5 +65,6 @@
     <button type="button" class="confirm-order-button" onclick="confirmOrder()">注文を確定する</button>
   </form>
 </div>
-<script defer src="{{ asset('js/order-checkout.js') }}"></script>
+
+<script defer src="{{ $prefix }}{{ asset('js/order-checkout.js') }}"></script>
 @endsection

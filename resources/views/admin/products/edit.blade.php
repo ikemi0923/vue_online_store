@@ -3,12 +3,16 @@
 @section('title', '商品編集')
 
 @section('content')
+@php
+    $prefix = app()->environment('production') ? '/laravel' : '';
+@endphp
+
 @if(session('success'))
-        {{ session('success') }}
+    {{ session('success') }}
 @endif
 
 <div class="admin-products-edit-container">
-    <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data"
+    <form action="{{ $prefix }}{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data"
         class="admin-products-edit-form">
         @csrf
         @method('PUT')
@@ -37,32 +41,32 @@
             </div>
             <div class="admin-products-edit-image-container" id="image-preview-container">
                 @if($product->images->isNotEmpty())
-                @foreach ($product->images->sortBy('order') as $image)
-                <div class="admin-products-edit-image-box" data-image-id="{{ $image->id }}">
-                    <img src="{{ asset('storage/' . $image->path) }}" alt="商品画像" class="admin-products-edit-image">
-                    <button type="button" class="admin-products-edit-delete-image-button" data-image-id="{{ $image->id }}">削除</button>
-                </div>
-                @endforeach
+                    @foreach ($product->images->sortBy('order') as $image)
+                    <div class="admin-products-edit-image-box" data-image-id="{{ $image->id }}">
+                        <img src="{{ $prefix }}{{ asset('storage/' . $image->path) }}" alt="商品画像" class="admin-products-edit-image">
+                        <button type="button" class="admin-products-edit-delete-image-button" data-image-id="{{ $image->id }}">削除</button>
+                    </div>
+                    @endforeach
                 @endif
             </div>
         </div>
     </form>
     <div class="admin-products-edit-buttons">
         <button class="admin-products-edit-submit-button" id="submit-btn">更新</button>
-        <form action="{{ route('admin.dashboard') }}" method="GET" style="display:inline;">
+        <form action="{{ $prefix }}{{ route('admin.dashboard') }}" method="GET" style="display:inline;">
             <button type="submit" class="admin-products-add-back-button">戻る</button>
         </form>
     </div>
     </form>
 </div>
-<script src="{{ asset('js/Sortable.min.js') }}"></script>
-<script src="{{ asset('js/admin-products-edit.js') }}"></script>
+<script src="{{ $prefix }}{{ asset('js/Sortable.min.js') }}"></script>
+<script src="{{ $prefix }}{{ asset('js/admin-products-edit.js') }}"></script>
 <script>
     function handleBack() {
         if (window.history.length > 1) {
             history.back();
         } else {
-            window.location.href = "{{ route('admin.products.index') }}";
+            window.location.href = "{{ $prefix }}{{ route('admin.products.index') }}";
         }
     }
 </script>
@@ -70,7 +74,5 @@
 document.getElementById("submit-btn").addEventListener("click", function () {
     document.querySelector(".admin-products-edit-form").submit();
 });
-
 </script>
-
 @endsection

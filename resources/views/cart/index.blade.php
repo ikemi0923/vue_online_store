@@ -3,6 +3,10 @@
 @section('title', 'ショッピングカート')
 
 @section('content')
+@php
+    $prefix = app()->environment('production') ? '/laravel' : '';
+@endphp
+
 @if(session('success'))
 <script>
     alert("{{ session('success') }}");
@@ -15,7 +19,7 @@
         @forelse($cart as $id => $item)
         <div class="cart-item">
             <div class="cart-item-image-container">
-                <img src="{{ $item['image'] }}" alt="商品画像" class="cart-item-image">
+                <img src="{{ $prefix }}{{ $item['image'] }}" alt="商品画像" class="cart-item-image">
             </div>
             <p class="cart-item-name">{{ $item['name'] }}</p>
             <div class="cart-item-quantity">

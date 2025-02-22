@@ -3,6 +3,9 @@
 @section('title', '注文管理')
 
 @section('content')
+@php
+    $prefix = app()->environment('production') ? '/laravel' : '';
+@endphp
 <div class="order-management-page">
     <main>
         <section class="order-management-section">
@@ -40,35 +43,35 @@
         <section class="order-items">
             <h3 class="section-title">注文商品</h3>
             @if($order->orderItems->isEmpty())
-            <p>注文商品が見つかりません。</p>
+                <p>注文商品が見つかりません。</p>
             @else
-            @foreach($order->orderItems as $item)
-            <div class="order-item">
-                <div class="item-image">
-                    <img src="{{ $item->product->first_image_url }}" alt="{{ $item->product->name }}">
-                </div>
-                <div class="item-info">
-                    <div class="info-row">
-                        <span>商品名</span>
-                        <span>個数</span>
-                        <span>価格</span>
+                @foreach($order->orderItems as $item)
+                <div class="order-item">
+                    <div class="item-image">
+                        <img src="{{ $item->product->first_image_url }}" alt="{{ $item->product->name }}">
                     </div>
-                    <div class="info-row">
-                        <span>
-                            @foreach($order->orderItems as $item)
-                            {{ $item->product->name }}<br>
-                            @endforeach
-                        </span>
-                        <span>
-                            @foreach($order->orderItems as $item)
-                            {{ $item->quantity }}<br>
-                            @endforeach
-                        </span>
-                        <span class="total-price">{{ number_format($order->total_price) }} 円</span>
+                    <div class="item-info">
+                        <div class="info-row">
+                            <span>商品名</span>
+                            <span>個数</span>
+                            <span>価格</span>
+                        </div>
+                        <div class="info-row">
+                            <span>
+                                @foreach($order->orderItems as $item)
+                                    {{ $item->product->name }}<br>
+                                @endforeach
+                            </span>
+                            <span>
+                                @foreach($order->orderItems as $item)
+                                    {{ $item->quantity }}<br>
+                                @endforeach
+                            </span>
+                            <span class="total-price">{{ number_format($order->total_price) }} 円</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            @endforeach
+                @endforeach
             @endif
         </section>
         <section class="shipping-status">
@@ -79,7 +82,7 @@
                 location.reload();
             </script>
             @endif
-            <form action="{{ route('admin.orders.updateStatus', ['id' => $order->id]) }}" method="POST" class="status-update-form">
+            <form action="{{ $prefix }}{{ route('admin.orders.updateStatus', ['id' => $order->id]) }}" method="POST" class="status-update-form">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
