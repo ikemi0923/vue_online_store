@@ -3,11 +3,9 @@
 @section('title', '商品追加ページ')
 
 @section('content')
-@php
-    $prefix = app()->environment('production') ? '/laravel' : '';
-@endphp
 <div class="admin-products-add-container">
-    <form action="{{ $prefix }}{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="admin-products-add-form">
+    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="admin-products-add-form">
+
         @csrf
         <div class="admin-products-add-info">
             <label class="admin-products-add-label">商品名:
@@ -56,21 +54,20 @@
                     画像はまだありません。
                 </p>
                 @if(isset($product) && $product->images->isNotEmpty())
-                    @foreach ($product->images->sortBy('order') as $image)
-                        <img src="{{ $prefix }}{{ asset('storage/' . $image->path) }}" alt="商品画像" class="admin-products-add-image">
-                    @endforeach
+                @foreach ($product->images->sortBy('order') as $image)
+                <img src="{{ asset('storage/' . $image->path) }}" alt="商品画像" class="admin-products-add-image">
+                @endforeach
                 @endif
             </div>
-        </div>
     </form>
     <div class="admin-products-add-buttons">
         <button class="admin-products-add-submit-button" id="submit-btn">追加</button>
-        <form action="{{ $prefix }}{{ route('admin.dashboard') }}" method="GET" style="display:inline;">
+        <form action="{{ route('admin.dashboard') }}" method="GET" style="display:inline;">
             <button type="submit" class="admin-products-add-back-button">戻る</button>
         </form>
     </div>
 </div>
 
-<script src="{{ $prefix }}{{ asset('js/Sortable.min.js') }}"></script>
-<script src="{{ $prefix }}{{ asset('js/admin-products-add.js') }}"></script>
+<script src="{{ asset('js/Sortable.min.js') }}"></script>
+<script src="{{ asset('js/admin-products-add.js') }}"></script>
 @endsection

@@ -3,17 +3,14 @@
 @section('title', '商品詳細')
 
 @section('content')
-@php
-    $prefix = app()->environment('production') ? '/laravel' : '';
-@endphp
 <div class="product-detail-container">
     <div class="product-images">
         <div class="main-image">
-            <img id="main-product-image" src="{{ $prefix }}{{ $product->getFirstImageUrlAttribute() }}" alt="{{ $product->name }}">
+            <img id="main-product-image" src="{{ $product->getFirstImageUrlAttribute() }}" alt="{{ $product->name }}">
         </div>
         <div class="thumbnail-images">
             @foreach ($product->images->sortBy('id') as $image)
-                <img src="{{ $prefix }}{{ asset('storage/' . $image->path) }}" alt="{{ $product->name }}" class="thumbnail" onclick="changeMainImage(this)">
+            <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $product->name }}" class="thumbnail" onclick="changeMainImage(this)">
             @endforeach
         </div>
     </div>

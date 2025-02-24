@@ -1,6 +1,3 @@
-@php
-$prefix = app()->environment('production') ? '/laravel' : '';
-@endphp
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -8,7 +5,7 @@ $prefix = app()->environment('production') ? '/laravel' : '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', '管理者ページ')</title>
-    <link rel="stylesheet" href="{{ $prefix }}/css/style.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -16,14 +13,14 @@ $prefix = app()->environment('production') ? '/laravel' : '';
 
     <div class="header-wrapper">
         <div class="logo">
-        <img src="{{ $prefix }}/images/logo/logo.jpeg" alt="ロゴ" />
+            <img src="{{ asset('images/logo/logo.jpeg') }}" alt="ロゴ" />
         </div>
         <div class="header-title">
             <h1>Vue Online Site</h1>
         </div>
         <nav class="nav">
             <ul>
-                <li><a href="{{ $prefix }}{{ url('/admin/login') }}">ログイン</a></li>
+                <li><a href="{{ url('/admin/login') }}">ログイン</a></li>
             </ul>
         </nav>
     </div>
@@ -31,17 +28,18 @@ $prefix = app()->environment('production') ? '/laravel' : '';
     <div class="order-management-header">
         <h1 class="order-management-title">@yield('pageTitle', '管理者ページ')</h1>
         <nav class="order-management-nav">
-            <a href="{{ $prefix }}{{ route('admin.dashboard') }}" class="order-management-link">管理者トップ</a>
-            <a href="{{ $prefix }}{{ route('admin.logout') }}" class="order-management-link"
+            <a href="{{ route('admin.dashboard') }}" class="order-management-link">管理者トップ</a>
+            <a href="{{ route('admin.logout') }}" class="order-management-link"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 ログアウト
             </a>
         </nav>
     </div>
 
-    <form id="logout-form" action="{{ $prefix }}{{ route('admin.logout') }}" method="POST" style="display: none;">
+    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
+
 
     <main>
         @yield('content')
