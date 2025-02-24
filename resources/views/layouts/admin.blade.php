@@ -1,5 +1,5 @@
 @php
-    $prefix = app()->environment('production') ? '/laravel' : '';
+$prefix = app()->environment('production') ? '/laravel' : '';
 @endphp
 <!DOCTYPE html>
 <html lang="ja">
@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', '管理者ページ')</title>
-    <link rel="stylesheet" href="{{ $prefix }}{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ $prefix }}/css/style.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
@@ -16,7 +16,7 @@
 
     <div class="header-wrapper">
         <div class="logo">
-            <img src="{{ $prefix }}{{ asset('images/logo/logo.jpeg') }}" alt="ロゴ" />
+        <img src="{{ $prefix }}/images/logo/logo.jpeg" alt="ロゴ" />
         </div>
         <div class="header-title">
             <h1>Vue Online Site</h1>
