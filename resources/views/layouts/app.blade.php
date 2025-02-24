@@ -2,13 +2,11 @@
 <html lang="ja">
 
 <head>
-    @php
-    $prefix = app()->environment('production') ? '/laravel' : '';
-    @endphp
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Vue Online Site')</title>
-    <link rel="stylesheet" href="{{ $prefix }}/css/style.css">
+    @vite(['resources/css/app.css'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
