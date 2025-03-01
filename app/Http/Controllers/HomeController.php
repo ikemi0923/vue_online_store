@@ -12,8 +12,7 @@ class HomeController extends Controller
         $products = Product::with(['images' => function ($query) {
             $query->orderBy('order')->limit(1);
         }])->orderBy('created_at', 'desc')->get();
-    
+
         return view('home', compact('products'));
     }
-    
 }

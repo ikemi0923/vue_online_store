@@ -26,3 +26,6 @@ echo ".DS_Store" >> .gitignore
 echo "docker/db/volume/" >> .gitignore
 echo "backup.sql" >> .gitignore
 echo "cookies.txt" >> .gitignore
+docker/db/volume/
+docker/db/volume/
+docker/db/volume/

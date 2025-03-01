@@ -22,10 +22,10 @@ class OrderController extends Controller
         if ($request->filled('phone')) {
             $query->where('phone', 'LIKE', '%' . $request->phone . '%');
         }
-    
+
         if ($request->filled('status') && $request->status !== 'all') {
             $query->where('status', $request->status);
-        }        
+        }
 
         $orders = $query->paginate(10);
 

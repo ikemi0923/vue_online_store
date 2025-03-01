@@ -12,6 +12,11 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/home', function () {
+    return view('home');
+});
+
+
 Route::prefix('products')->name('products.')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('index');
     Route::get('/{id}', [ProductController::class, 'show'])->name('show');

@@ -20,9 +20,10 @@ document.addEventListener("DOMContentLoaded", function () {
             reader.onload = function (e) {
                 const div = document.createElement("div");
                 div.classList.add("admin-products-edit-image-box");
+                div.setAttribute("data-image-id", "");
                 div.innerHTML = `
                     <img src="${e.target.result}" alt="プレビュー画像" class="admin-products-edit-image">
-                    <button type="button" class="admin-products-edit-delete-image-button" data-image-id="">削除</button>
+                    <button type="button" class="admin-products-edit-delete-image-button">削除</button>
                 `;
                 imageContainer.appendChild(div);
                 saveImageOrder();
@@ -34,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
     imageContainer.addEventListener("click", function (e) {
         if (e.target.classList.contains("admin-products-edit-delete-image-button")) {
             const imageBox = e.target.closest(".admin-products-edit-image-box");
-            const imageId = e.target.dataset.imageId || null;
+            const imageId = imageBox.dataset.imageId || null;
 
             if (!confirm("本当にこの画像を削除しますか？")) {
                 return;
@@ -55,16 +56,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-
+                            console.log("画像削除成功");
+                        } else {
+                            alert("画像削除に失敗しました。");
                         }
                     })
                     .catch(error => {
-
+                        console.error("削除エラー:", error);
                     });
             }
         }
     });
-
 
     function updateNoImagesMessage() {
         const noImagesMessage = document.getElementById("no-images-message");
@@ -90,10 +92,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (imageOrder.length === 0) {
-
+            return;
         }
 
-        fetch("/admin/products/update-image-order", {
+        fetch("/laravel/admin/products/update-image-order", {
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
@@ -104,7 +106,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
             })
             .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("✅ 画像順番更新成功");
+                } else {
+                    console.error("⚠️ 画像順番更新エラー:", data.message);
+                }
+            })
             .catch(error => {
+                console.error("⚠️ サーバーエラー:", error);
             });
     }
 

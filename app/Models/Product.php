@@ -22,16 +22,12 @@ class Product extends Model
 
     public function getFirstImageUrlAttribute()
     {
-        $firstImage = $this->images()->first();
+        $firstImage = $this->images()->orderBy('order')->get()->first();
+
         if ($firstImage) {
-            $url = Storage::url($firstImage->path);
-            if (app()->environment('production')) {
-                if (!Str::startsWith($url, '/laravel')) {
-                    $url = '/laravel' . $url;
-                }
-            }
-            return $url;
+            return asset('storage/' . $firstImage->path);
         }
+
         return asset('images/no-image.jpg');
     }
 }

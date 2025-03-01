@@ -15,9 +15,13 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('images')->orderBy('created_at', 'desc')->paginate(5);
+        $products = Product::with(['images' => function ($query) {
+            $query->orderBy('order');
+        }])->orderBy('created_at', 'desc')->paginate(5);
+
         return view('admin.products.index', compact('products'));
     }
+
 
     public function create()
     {
@@ -126,7 +130,6 @@ class ProductController extends Controller
             DB::commit();
 
             return redirect()->route('admin.products.index')->with('success', '商品が更新されました！');
-
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -140,21 +143,27 @@ class ProductController extends Controller
 
     public function updateImageOrder(Request $request)
     {
+        DB::beginTransaction();
 
         try {
             if (!isset($request->images) || empty($request->images)) {
                 return response()->json(['success' => false, 'message' => '画像順序データが空です。'], 400);
             }
 
-            foreach ($request->images as $imageData) {
-                ProductImage::where('id', $imageData['id'])->update(['order' => $imageData['order']]);
+            foreach ($request->images as $index => $imageData) {
+                ProductImage::where('id', $imageData['id'])
+                    ->update(['order' => $index + 1]);
             }
+
+            DB::commit();
 
             return response()->json(['success' => true, 'message' => '画像の順番を更新しました。']);
         } catch (Exception $e) {
-            return response()->json(['success' => false, 'message' => '画像順序更新に失敗しました。'], 500);
+            DB::rollBack();
+            return response()->json(['success' => false, 'message' => '画像順序更新に失敗しました。', 'error' => $e->getMessage()], 500);
         }
     }
+
 
 
     public function deleteImage($id)
@@ -172,11 +181,23 @@ class ProductController extends Controller
         return response()->json(['success' => true]);
     }
 
+
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $product->delete();
+        DB::beginTransaction();
 
-        return redirect()->route('admin.products.index')->with('success', '商品を削除しました。');
+        try {
+            DB::table('order_details')->where('product_id', $id)->delete();
+            DB::table('order_items')->where('product_id', $id)->delete();
+            DB::table('product_images')->where('product_id', $id)->delete();
+            DB::table('products')->where('id', $id)->delete();
+
+            DB::commit();
+
+            return redirect()->route('admin.products.index')->with('success', '商品を削除しました。');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('admin.products.index')->with('error', '商品削除に失敗しました: ' . $e->getMessage());
+        }
     }
 }

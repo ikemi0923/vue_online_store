@@ -71,7 +71,7 @@ window.confirmOrder = function () {
         cart: JSON.parse(localStorage.getItem("cart"))
     };
 
-    fetch("/order/confirm", {
+    fetch("http://t014.codelab-vuetech2.net/laravel/order/confirm", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -86,7 +86,7 @@ window.confirmOrder = function () {
                 if (jsonData.success) {
                     alert("✅ 注文が完了しました！");
                     localStorage.removeItem("cart");
-                    window.location.href = "/order/complete";
+                    window.location.href = "/laravel/order/complete";
                 } else {
                     alert("❌ 入力項目に誤りがあります ");
                 }

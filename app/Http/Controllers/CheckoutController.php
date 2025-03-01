@@ -20,7 +20,7 @@ class CheckoutController extends Controller
 
     public function confirm(Request $request)
     {
-        try {   
+        try {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
                 'kana' => 'required|string|max:255|regex:/^[ァ-ヶー]+$/u',
@@ -33,7 +33,7 @@ class CheckoutController extends Controller
                 'phone3' => 'required|digits:4',
                 'payment_option' => 'required|string|in:credit,bank,cash',
             ]);
-    
+
             if ($validatedData['payment_option'] === 'credit') {
                 $request->validate([
                     'cardholder_name' => 'required|string|min:2|max:30|regex:/^[A-Z\s]+$/',
@@ -43,9 +43,9 @@ class CheckoutController extends Controller
                     'security_code' => 'required|digits_between:3,4',
                 ]);
             }
-    
+
             DB::beginTransaction();
-    
+
             $order = new Order();
             $order->name = $validatedData['name'];
             $order->furigana = $validatedData['kana'];
@@ -56,13 +56,13 @@ class CheckoutController extends Controller
             $order->total_price = 1000;
             $order->status = 'pending';
             $order->save();
-    
+
             $cart = session()->get('cart', []);
 
             if (empty($cart)) {
                 return response()->json(['success' => false, 'message' => 'カートが空です。']);
             }
-    
+
             foreach ($cart as $productId => $cartItem) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -71,16 +71,15 @@ class CheckoutController extends Controller
                     'price' => $cartItem['price'],
                 ]);
             }
-    
+
             session()->forget('cart');
-    
+
             DB::commit();
-    
+
             return response()->json(['success' => true, 'message' => '注文完了']);
-    
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             return response()->json(['success' => false, 'message' => '注文処理に失敗しました。', 'error' => $e->getMessage()]);
         }
     }
@@ -89,5 +88,4 @@ class CheckoutController extends Controller
     {
         return view('order.complete');
     }
-
 }
